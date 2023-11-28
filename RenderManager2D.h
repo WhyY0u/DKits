@@ -483,7 +483,7 @@ public:
             return "Unknown";
         }
     }
-    void RectHvoer(float x, float y, float width, float height, Color color, Color color2, Color color3, float radius, float alpha) {
+    void drawTripleGradient(float x, float y, float width, float height, Color color, Color color2, Color color3, float radius, float alpha) {
         std::vector<float> vertex = {
       x, y, 0.0f, 0.0f, 0.0f,
       x + width, y, 0.0f, 1.0f, 0.0f,
@@ -494,7 +494,7 @@ public:
            0, 1, 2,
            2, 3, 0
         };
-        RenderManager* manager = new RenderManager("C:/Users/User/Desktop/APISystem/DKIT/Project1/shader/Vertex/Vertex.vert", "C:/Users/User/Desktop/APISystem/DKIT/Project1/shader/React/ReactMouse.frag", vertex, indices);
+        RenderManager* manager = new RenderManager("C:/Users/User/Desktop/APISystem/DKIT/Project1/shader/Vertex/Vertex.vert", "C:/Users/User/Desktop/APISystem/DKIT/Project1/shader/React/TripleGradient.frag", vertex, indices);
         manager->PreRender();
         manager->useShader(screenWidth, screenHeight);
         manager->setUniform3f("color", color.getRed(), color.getGreen(), color.getBlue());

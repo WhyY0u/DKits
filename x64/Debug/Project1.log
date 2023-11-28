@@ -1,7 +1,42 @@
-﻿LINK : warning LNK4098: библиотека по умолчанию "MSVCRT" конфликтует с использованием других библиотек; используйте /NODEFAULTLIB:library
+﻿  Menu.cpp
+  The contents of <filesystem> are available only with C++17 or later.
+C:\Users\User\Desktop\APISystem\DKIT\Project1\RenderManager2D.h(59,22): warning C4244: =: преобразование "int" в "float", возможна потеря данных
+C:\Users\User\Desktop\APISystem\DKIT\Project1\RenderManager2D.h(60,24): warning C4244: =: преобразование "int" в "float", возможна потеря данных
+C:\Users\User\Desktop\APISystem\DKIT\Project1\RenderManager2D.h(61,23): warning C4244: =: преобразование "int" в "float", возможна потеря данных
+C:\Users\User\Desktop\APISystem\DKIT\Project1\RenderManager2D.h(357,36): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Users\User\Desktop\APISystem\DKIT\Project1\RenderManager2D.h(374,25): warning C4018: >: несоответствие типов со знаком и без знака
+C:\Users\User\Desktop\APISystem\DKIT\Project1\RenderManager2D.h(515,66): warning C4244: аргумент: преобразование "float" в "int", возможна потеря данных
+C:\Users\User\Desktop\APISystem\DKIT\Project1\RenderManager2D.h(602,42): warning C4244: аргумент: преобразование "float" в "int", возможна потеря данных
+C:\Users\User\Desktop\APISystem\DKIT\Project1\RenderManager2D.h(602,35): warning C4244: аргумент: преобразование "float" в "int", возможна потеря данных
+C:\Users\User\Desktop\APISystem\DKIT\Project1\RenderManager2D.h(631,42): warning C4244: аргумент: преобразование "float" в "int", возможна потеря данных
+C:\Users\User\Desktop\APISystem\DKIT\Project1\RenderManager2D.h(631,35): warning C4244: аргумент: преобразование "float" в "int", возможна потеря данных
+C:\Users\User\Desktop\APISystem\DKIT\Project1\RenderManager2D.h(658,107): warning C4244: аргумент: преобразование "float" в "int", возможна потеря данных
+C:\Users\User\Desktop\APISystem\DKIT\Project1\RenderManager2D.h(658,93): warning C4244: аргумент: преобразование "float" в "int", возможна потеря данных
+C:\Users\User\Desktop\APISystem\DKIT\Project1\RenderManager2D.h(661,42): warning C4244: аргумент: преобразование "GLuint" в "float", возможна потеря данных
+C:\Users\User\Desktop\APISystem\DKIT\Project1\RenderManager2D.h(688,56): warning C4244: аргумент: преобразование "float" в "GLsizei", возможна потеря данных
+C:\Users\User\Desktop\APISystem\DKIT\Project1\RenderManager2D.h(688,49): warning C4244: аргумент: преобразование "float" в "GLsizei", возможна потеря данных
+  RenderManager2D.h
+  The contents of <filesystem> are available only with C++17 or later.
+C:\Users\User\Desktop\APISystem\DKIT\Project1\RenderManager2D.h(59,22): warning C4244: =: преобразование "int" в "float", возможна потеря данных
+C:\Users\User\Desktop\APISystem\DKIT\Project1\RenderManager2D.h(60,24): warning C4244: =: преобразование "int" в "float", возможна потеря данных
+C:\Users\User\Desktop\APISystem\DKIT\Project1\RenderManager2D.h(61,23): warning C4244: =: преобразование "int" в "float", возможна потеря данных
+C:\Users\User\Desktop\APISystem\DKIT\Project1\RenderManager2D.h(357,36): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Users\User\Desktop\APISystem\DKIT\Project1\RenderManager2D.h(374,25): warning C4018: >: несоответствие типов со знаком и без знака
+C:\Users\User\Desktop\APISystem\DKIT\Project1\RenderManager2D.h(515,66): warning C4244: аргумент: преобразование "float" в "int", возможна потеря данных
+C:\Users\User\Desktop\APISystem\DKIT\Project1\RenderManager2D.h(602,42): warning C4244: аргумент: преобразование "float" в "int", возможна потеря данных
+C:\Users\User\Desktop\APISystem\DKIT\Project1\RenderManager2D.h(602,35): warning C4244: аргумент: преобразование "float" в "int", возможна потеря данных
+C:\Users\User\Desktop\APISystem\DKIT\Project1\RenderManager2D.h(631,42): warning C4244: аргумент: преобразование "float" в "int", возможна потеря данных
+C:\Users\User\Desktop\APISystem\DKIT\Project1\RenderManager2D.h(631,35): warning C4244: аргумент: преобразование "float" в "int", возможна потеря данных
+C:\Users\User\Desktop\APISystem\DKIT\Project1\RenderManager2D.h(658,107): warning C4244: аргумент: преобразование "float" в "int", возможна потеря данных
+C:\Users\User\Desktop\APISystem\DKIT\Project1\RenderManager2D.h(658,93): warning C4244: аргумент: преобразование "float" в "int", возможна потеря данных
+C:\Users\User\Desktop\APISystem\DKIT\Project1\RenderManager2D.h(661,42): warning C4244: аргумент: преобразование "GLuint" в "float", возможна потеря данных
+C:\Users\User\Desktop\APISystem\DKIT\Project1\RenderManager2D.h(688,56): warning C4244: аргумент: преобразование "float" в "GLsizei", возможна потеря данных
+C:\Users\User\Desktop\APISystem\DKIT\Project1\RenderManager2D.h(688,49): warning C4244: аргумент: преобразование "float" в "GLsizei", возможна потеря данных
+  Создание кода...
+LINK : warning LNK4098: библиотека по умолчанию "MSVCRT" конфликтует с использованием других библиотек; используйте /NODEFAULTLIB:library
 LINK : warning LNK4098: библиотека по умолчанию "LIBCMT" конфликтует с использованием других библиотек; используйте /NODEFAULTLIB:library
-freetype.lib(autofit.obj) : warning LNK4099: "freetype.pdb" PDB не найден с "freetype.lib(autofit.obj)" или на "C:\Users\User\Desktop\APISystem\DKIT\Project1\x64\Debug\freetype.pdb"; компоновка объекта выполняется как при отсутствии отладочных данных
-freetype.lib(ftbase.obj) : warning LNK4099: "" PDB не найден с "freetype.lib(ftbase.obj)" или на ""; компоновка объекта выполняется как при отсутствии отладочных данных
+freetype.lib(autofit.obj) : warning LNK4099: "" PDB не найден с "freetype.lib(autofit.obj)" или на ""; компоновка объекта выполняется как при отсутствии отладочных данных
+freetype.lib(ftbase.obj) : warning LNK4099: "freetype.pdb" PDB не найден с "freetype.lib(ftbase.obj)" или на "C:\Users\User\Desktop\APISystem\DKIT\Project1\x64\Debug\freetype.pdb"; компоновка объекта выполняется как при отсутствии отладочных данных
 freetype.lib(ftbitmap.obj) : warning LNK4099: "freetype.pdb" PDB не найден с "freetype.lib(ftbitmap.obj)" или на "C:\Users\User\Desktop\APISystem\DKIT\Project1\x64\Debug\freetype.pdb"; компоновка объекта выполняется как при отсутствии отладочных данных
 freetype.lib(ftinit.obj) : warning LNK4099: "freetype.pdb" PDB не найден с "freetype.lib(ftinit.obj)" или на "C:\Users\User\Desktop\APISystem\DKIT\Project1\x64\Debug\freetype.pdb"; компоновка объекта выполняется как при отсутствии отладочных данных
 freetype.lib(ftmm.obj) : warning LNK4099: "freetype.pdb" PDB не найден с "freetype.lib(ftmm.obj)" или на "C:\Users\User\Desktop\APISystem\DKIT\Project1\x64\Debug\freetype.pdb"; компоновка объекта выполняется как при отсутствии отладочных данных
@@ -18,11 +53,11 @@ freetype.lib(psmodule.obj) : warning LNK4099: "freetype.pdb" PDB не найде
 freetype.lib(raster.obj) : warning LNK4099: "freetype.pdb" PDB не найден с "freetype.lib(raster.obj)" или на "C:\Users\User\Desktop\APISystem\DKIT\Project1\x64\Debug\freetype.pdb"; компоновка объекта выполняется как при отсутствии отладочных данных
 freetype.lib(sfnt.obj) : warning LNK4099: "freetype.pdb" PDB не найден с "freetype.lib(sfnt.obj)" или на "C:\Users\User\Desktop\APISystem\DKIT\Project1\x64\Debug\freetype.pdb"; компоновка объекта выполняется как при отсутствии отладочных данных
 freetype.lib(smooth.obj) : warning LNK4099: "freetype.pdb" PDB не найден с "freetype.lib(smooth.obj)" или на "C:\Users\User\Desktop\APISystem\DKIT\Project1\x64\Debug\freetype.pdb"; компоновка объекта выполняется как при отсутствии отладочных данных
-freetype.lib(sdf.obj) : warning LNK4099: "freetype.pdb" PDB не найден с "freetype.lib(sdf.obj)" или на "C:\Users\User\Desktop\APISystem\DKIT\Project1\x64\Debug\freetype.pdb"; компоновка объекта выполняется как при отсутствии отладочных данных
-freetype.lib(svg.obj) : warning LNK4099: "freetype.pdb" PDB не найден с "freetype.lib(svg.obj)" или на "C:\Users\User\Desktop\APISystem\DKIT\Project1\x64\Debug\freetype.pdb"; компоновка объекта выполняется как при отсутствии отладочных данных
+freetype.lib(sdf.obj) : warning LNK4099: "" PDB не найден с "freetype.lib(sdf.obj)" или на ""; компоновка объекта выполняется как при отсутствии отладочных данных
+freetype.lib(svg.obj) : warning LNK4099: "" PDB не найден с "freetype.lib(svg.obj)" или на ""; компоновка объекта выполняется как при отсутствии отладочных данных
 freetype.lib(truetype.obj) : warning LNK4099: "freetype.pdb" PDB не найден с "freetype.lib(truetype.obj)" или на "C:\Users\User\Desktop\APISystem\DKIT\Project1\x64\Debug\freetype.pdb"; компоновка объекта выполняется как при отсутствии отладочных данных
 freetype.lib(type1.obj) : warning LNK4099: "freetype.pdb" PDB не найден с "freetype.lib(type1.obj)" или на "C:\Users\User\Desktop\APISystem\DKIT\Project1\x64\Debug\freetype.pdb"; компоновка объекта выполняется как при отсутствии отладочных данных
-freetype.lib(type42.obj) : warning LNK4099: "" PDB не найден с "freetype.lib(type42.obj)" или на ""; компоновка объекта выполняется как при отсутствии отладочных данных
+freetype.lib(type42.obj) : warning LNK4099: "freetype.pdb" PDB не найден с "freetype.lib(type42.obj)" или на "C:\Users\User\Desktop\APISystem\DKIT\Project1\x64\Debug\freetype.pdb"; компоновка объекта выполняется как при отсутствии отладочных данных
 freetype.lib(winfnt.obj) : warning LNK4099: "freetype.pdb" PDB не найден с "freetype.lib(winfnt.obj)" или на "C:\Users\User\Desktop\APISystem\DKIT\Project1\x64\Debug\freetype.pdb"; компоновка объекта выполняется как при отсутствии отладочных данных
 freetype.lib(ftdebug.obj) : warning LNK4099: "freetype.pdb" PDB не найден с "freetype.lib(ftdebug.obj)" или на "C:\Users\User\Desktop\APISystem\DKIT\Project1\x64\Debug\freetype.pdb"; компоновка объекта выполняется как при отсутствии отладочных данных
 freetype.lib(ftsystem.obj) : warning LNK4099: "freetype.pdb" PDB не найден с "freetype.lib(ftsystem.obj)" или на "C:\Users\User\Desktop\APISystem\DKIT\Project1\x64\Debug\freetype.pdb"; компоновка объекта выполняется как при отсутствии отладочных данных
