@@ -42,6 +42,9 @@
     <ClCompile Include="Scene.cpp">
       <Filter>Исходные файлы\Scene</Filter>
     </ClCompile>
+    <ClCompile Include="Register.cpp">
+      <Filter>Исходные файлы\Scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\stb_image.h">
@@ -60,6 +63,9 @@
       <Filter>Исходные файлы\Scene</Filter>
     </ClInclude>
     <ClInclude Include="Menu.h">
+      <Filter>Исходные файлы\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Register.h">
       <Filter>Исходные файлы\Scene</Filter>
     </ClInclude>
   </ItemGroup>

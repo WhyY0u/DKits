@@ -494,6 +494,9 @@ public:
            0, 1, 2,
            2, 3, 0
         };
+        glEnable(GL_BLEND);
+        glDisable(GL_ALPHA_TEST);
+        
         RenderManager* manager = new RenderManager("C:/Users/User/Desktop/APISystem/DKIT/Project1/shader/Vertex/Vertex.vert", "C:/Users/User/Desktop/APISystem/DKIT/Project1/shader/React/TripleGradient.frag", vertex, indices);
         manager->PreRender();
         manager->useShader(screenWidth, screenHeight);

@@ -12,7 +12,7 @@ void Scene::close() {
 
 }
 
-void Scene::mouseClicked() {
+void Scene::mouseClicked(int button, int action) {
 
 }
 

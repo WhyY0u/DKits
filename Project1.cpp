@@ -62,6 +62,7 @@ int main() {
     windows.setWindows(windows.createWindow(20, 20, 857, 640, Color("#111111"), true, "Dissimilate", "null", ft));
     windows.outlinecolor = Color("#3D3D3D");
     windows.setRounded(0.035f);
+    windows.setScene(new Menu("Menu"));
     if (!windows.getWindows()) {
         glfwTerminate();
         return -1;

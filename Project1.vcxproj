@@ -154,6 +154,7 @@
     <ClCompile Include="include\glad.c" />
     <ClCompile Include="Menu.cpp" />
     <ClCompile Include="Project1.cpp" />
+    <ClCompile Include="Register.cpp" />
     <ClCompile Include="RenderManager2D.h" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="stb_image.cpp" />
@@ -163,6 +164,7 @@
     <ClInclude Include="include\stb_image.h" />
     <ClInclude Include="Menu.h" />
     <ClInclude Include="MouseHelper.h" />
+    <ClInclude Include="Register.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="WindowsHelper.h" />
   </ItemGroup>

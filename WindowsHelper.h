@@ -45,7 +45,6 @@ GLFWwindow* createWindow(float x, float y, float screenWidth, float screenHeight
 	addButtonBar(7, 15, 2, "C:/Users/User/Desktop/APISystem/DKIT/Project1/img/rollup.png", Color("#2E2E2E"), Color("#B7B0B0"), RollUp);
 	addButtonBar(0, 15, 15, "C:/Users/User/Desktop/APISystem/DKIT/Project1/img/recover.png", Color("#2E2E2E"), Color("#B7B0B0"), Recover);
 	addButtonBar(0, 15, 15, "C:/Users/User/Desktop/APISystem/DKIT/Project1/img/close.png", Color("#2E2E2E"), Color("#9B3030"), Close);
-	scene = new Menu();
 	return glfwCreateWindow(screenWidth, screenHeight, this->name.c_str(), nullptr, nullptr);
 }
 void DisableConsole() {
@@ -63,6 +62,8 @@ void mouseClicked(int button, int action) {
 		mouseClickedBar();
 		std::cout << "Cliced" << std::endl;
 	}
+	scene->mouseClicked(button, action);
+
 }
 void Render2D() {
 	if (outline) {
@@ -80,6 +81,9 @@ void Render2D() {
 GLFWwindow* getWindows() {
 	return window;
 }
+Scene* getScene() {
+	return scene;
+}
 bool EnableFontRender() {
 	if (FT_Init_FreeType(&ft)) {
 		std::cout << "Error FT" << std::endl;
@@ -87,6 +91,9 @@ bool EnableFontRender() {
 		return true;
 	}
 	return false;
+}
+void setScene(Scene* scene) {
+	this->scene = scene;
 }
 bool EnableGLFW() {
 	if (!glfwInit()) {
