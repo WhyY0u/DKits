@@ -1,0 +1,47 @@
+﻿  glad.c
+  Project1.cpp
+  The contents of <filesystem> are available only with C++17 or later.
+C:\Users\User\Desktop\APISystem\DKIT\Project1\RenderManager2D.h(57,22): warning C4244: =: преобразование "int" в "float", возможна потеря данных
+C:\Users\User\Desktop\APISystem\DKIT\Project1\RenderManager2D.h(58,24): warning C4244: =: преобразование "int" в "float", возможна потеря данных
+C:\Users\User\Desktop\APISystem\DKIT\Project1\RenderManager2D.h(59,23): warning C4244: =: преобразование "int" в "float", возможна потеря данных
+C:\Users\User\Desktop\APISystem\DKIT\Project1\RenderManager2D.h(343,39): warning C4244: аргумент: преобразование "float" в "int", возможна потеря данных
+C:\Users\User\Desktop\APISystem\DKIT\Project1\RenderManager2D.h(343,32): warning C4244: аргумент: преобразование "float" в "int", возможна потеря данных
+C:\Users\User\Desktop\APISystem\DKIT\Project1\RenderManager2D.h(370,104): warning C4244: аргумент: преобразование "float" в "int", возможна потеря данных
+C:\Users\User\Desktop\APISystem\DKIT\Project1\RenderManager2D.h(370,90): warning C4244: аргумент: преобразование "float" в "int", возможна потеря данных
+C:\Users\User\Desktop\APISystem\DKIT\Project1\RenderManager2D.h(373,39): warning C4244: аргумент: преобразование "GLuint" в "float", возможна потеря данных
+C:\Users\User\Desktop\APISystem\DKIT\Project1\RenderManager2D.h(394,56): warning C4244: аргумент: преобразование "float" в "GLsizei", возможна потеря данных
+C:\Users\User\Desktop\APISystem\DKIT\Project1\RenderManager2D.h(394,49): warning C4244: аргумент: преобразование "float" в "GLsizei", возможна потеря данных
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\shared\minwindef.h(130,1): warning C4005: APIENTRY: изменение макроопределения
+C:\Users\User\Desktop\APISystem\DKIT\Project1\include\glad\glad.h(32): message : см. предыдущее определение "APIENTRY"
+C:\Users\User\Desktop\APISystem\DKIT\Project1\Project1.cpp(82,43): warning C4244: аргумент: преобразование "int" в "float", возможна потеря данных
+C:\Users\User\Desktop\APISystem\DKIT\Project1\Project1.cpp(82,30): warning C4244: аргумент: преобразование "int" в "float", возможна потеря данных
+C:\Users\User\Desktop\APISystem\DKIT\Project1\Project1.cpp(82,77): warning C4244: аргумент: преобразование "int" в "float", возможна потеря данных
+C:\Users\User\Desktop\APISystem\DKIT\Project1\Project1.cpp(82,64): warning C4244: аргумент: преобразование "int" в "float", возможна потеря данных
+C:\Users\User\Desktop\APISystem\DKIT\Project1\Project1.cpp(83,43): warning C4244: аргумент: преобразование "int" в "float", возможна потеря данных
+C:\Users\User\Desktop\APISystem\DKIT\Project1\Project1.cpp(83,30): warning C4244: аргумент: преобразование "int" в "float", возможна потеря данных
+C:\Users\User\Desktop\APISystem\DKIT\Project1\Project1.cpp(83,94): warning C4244: аргумент: преобразование "int" в "float", возможна потеря данных
+C:\Users\User\Desktop\APISystem\DKIT\Project1\Project1.cpp(83,76): warning C4244: аргумент: преобразование "int" в "float", возможна потеря данных
+C:\Users\User\Desktop\APISystem\DKIT\Project1\Project1.cpp(86,113): warning C4244: аргумент: преобразование "int" в "float", возможна потеря данных
+C:\Users\User\Desktop\APISystem\DKIT\Project1\Project1.cpp(86,100): warning C4244: аргумент: преобразование "int" в "float", возможна потеря данных
+C:\Users\User\Desktop\APISystem\DKIT\Project1\Project1.cpp(87,116): warning C4244: аргумент: преобразование "int" в "float", возможна потеря данных
+C:\Users\User\Desktop\APISystem\DKIT\Project1\Project1.cpp(87,103): warning C4244: аргумент: преобразование "int" в "float", возможна потеря данных
+C:\Users\User\Desktop\APISystem\DKIT\Project1\Project1.cpp(88,115): warning C4244: аргумент: преобразование "int" в "float", возможна потеря данных
+C:\Users\User\Desktop\APISystem\DKIT\Project1\Project1.cpp(88,102): warning C4244: аргумент: преобразование "int" в "float", возможна потеря данных
+  RenderManager2D.h
+  The contents of <filesystem> are available only with C++17 or later.
+C:\Users\User\Desktop\APISystem\DKIT\Project1\RenderManager2D.h(57,22): warning C4244: =: преобразование "int" в "float", возможна потеря данных
+C:\Users\User\Desktop\APISystem\DKIT\Project1\RenderManager2D.h(58,24): warning C4244: =: преобразование "int" в "float", возможна потеря данных
+C:\Users\User\Desktop\APISystem\DKIT\Project1\RenderManager2D.h(59,23): warning C4244: =: преобразование "int" в "float", возможна потеря данных
+C:\Users\User\Desktop\APISystem\DKIT\Project1\RenderManager2D.h(343,39): warning C4244: аргумент: преобразование "float" в "int", возможна потеря данных
+C:\Users\User\Desktop\APISystem\DKIT\Project1\RenderManager2D.h(343,32): warning C4244: аргумент: преобразование "float" в "int", возможна потеря данных
+C:\Users\User\Desktop\APISystem\DKIT\Project1\RenderManager2D.h(370,104): warning C4244: аргумент: преобразование "float" в "int", возможна потеря данных
+C:\Users\User\Desktop\APISystem\DKIT\Project1\RenderManager2D.h(370,90): warning C4244: аргумент: преобразование "float" в "int", возможна потеря данных
+C:\Users\User\Desktop\APISystem\DKIT\Project1\RenderManager2D.h(373,39): warning C4244: аргумент: преобразование "GLuint" в "float", возможна потеря данных
+C:\Users\User\Desktop\APISystem\DKIT\Project1\RenderManager2D.h(394,56): warning C4244: аргумент: преобразование "float" в "GLsizei", возможна потеря данных
+C:\Users\User\Desktop\APISystem\DKIT\Project1\RenderManager2D.h(394,49): warning C4244: аргумент: преобразование "float" в "GLsizei", возможна потеря данных
+  stb_image.cpp
+  Создание кода
+  Previous IPDB not found, fall back to full compilation.
+  All 572 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  Создание кода завершено
+  Project1.vcxproj -> C:\Users\User\Desktop\APISystem\DKIT\Project1\x64\Release\Project1.exe
