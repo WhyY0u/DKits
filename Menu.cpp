@@ -3,6 +3,7 @@
 #include "WindowsHelper.h"
 #include "Register.h"
 void Menu::render(FT_Library ft) {
+	Windows::getInstance().setEnableRecover(false);
 	RenderUtils::getInstance().drawTexture("C:/Users/User/Desktop/APISystem/DKIT/Project1/img/qr.png", 50, 50, 260, 260);
 	RenderUtils::getInstance().drawText(55, 350, InterLight, L"Сканируйте QR в мобильном", ft, 18, Color("#807474"), 1.0f);
 	RenderUtils::getInstance().drawText(61, 373, InterLight, L"приложения Dissimilate для", ft, 18, Color("#807474"), 1.0f);
@@ -13,7 +14,6 @@ void Menu::render(FT_Library ft) {
 
 	RenderUtils::getInstance().drawText(155, 461, InterLight, L"Войти", ft, 18, Color("#FFFFFF"), 1.0f);
 	RenderUtils::getInstance().drawText(100, 531, InterLight, L"Зарегистрироватся", ft, 18, Color("#FFFFFF"), 1.0f);
-	std::cout << Windows::getInstance().getScene()->name << std::endl;
 }
 
 void Menu::init()

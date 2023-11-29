@@ -1,7 +1,7 @@
 ﻿#include "WindowsHelper.h"
 #include <Windows.h>
 FT_Library ft;
-Windows windows;
+Windows& windows = Windows::getInstance();
 void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
     glViewport(0, 0, width, height);
 }

@@ -68,5 +68,8 @@
     <ClInclude Include="Register.h">
       <Filter>Исходные файлы\Scene</Filter>
     </ClInclude>
+    <ClInclude Include="Loading.h">
+      <Filter>Исходные файлы\Scene</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

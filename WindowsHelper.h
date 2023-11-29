@@ -138,12 +138,16 @@ void setBarStep(float BarStep) {
 bool getFullScreen() {
 	return FullScreen;
 }
+void setEnableRecover(bool recover) {
+	this->EnableRecover = recover;
+}
 FT_Library ft;
 
 private:
 bool FullScreen;
 float BarX, BarY, BarStep;
 int oldBarWidth, oldBarHeight, oldBarX, oldBarY;
+bool EnableRecover;
 std::vector<Button> buttons;
 void renderBar() {
 	float x2 = 0;
@@ -157,7 +161,7 @@ void renderBar() {
 			break;
 
 		case Recover:
-			RenderUtils::getInstance().drawTextureColor("C:/Users/User/Desktop/APISystem/DKIT/Project1/img/recover.png", BarX + x2, BarY + b.y, b.width, b.height, MouseHelper::getInstance().hover(BarX + x2, BarY + b.y, b.width, b.height) ? b.HoverColor : b.Color);
+			RenderUtils::getInstance().drawTextureColor("C:/Users/User/Desktop/APISystem/DKIT/Project1/img/recover.png", BarX + x2, BarY + b.y, b.width, b.height, EnableRecover ? (MouseHelper::getInstance().hover(BarX + x2, BarY + b.y, b.width, b.height) ? b.HoverColor : b.Color)  :  Color("#1A1919"));
 			b.x = x2;
 			break;
 
@@ -184,7 +188,7 @@ bool mouseClickedBar() {
 				SendMessage(console, WM_CLOSE, 0, 0);
 				return true;
 			}
-			if (b.typ == Recover) {
+			if (b.typ == Recover && EnableRecover) {
 				FullScreen = !FullScreen;
 				if (FullScreen) {
 					RECT windowRect;

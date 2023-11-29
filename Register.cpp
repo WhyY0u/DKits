@@ -2,6 +2,7 @@
 #include "Register.h"
 #include "WindowsHelper.h"
 void Register::render(FT_Library ft) {
+	Windows::getInstance().setEnableRecover(true);
 	std::cout << "Register" << std::endl;
 }
 
