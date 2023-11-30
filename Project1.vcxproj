@@ -152,6 +152,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="include\glad.c" />
+    <ClCompile Include="Loading.cpp" />
     <ClCompile Include="Menu.cpp" />
     <ClCompile Include="Project1.cpp" />
     <ClCompile Include="Register.cpp" />
