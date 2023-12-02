@@ -2,12 +2,14 @@
 #include "Register.h"
 #include "WindowsHelper.h"
 void Register::render(FT_Library ft) {
-	Windows::getInstance().setEnableRecover(true);
-	std::cout << "Register" << std::endl;
+	RenderUtils::getInstance().drawGlowTexture("C:/Users/User/Desktop/APISystem/DKIT/Project1/img/logo.png", 100, 0, 270, 180);
 }
 
-void Register::init()
-{
+void Register::init() {
+	Windows::getInstance().setWindowsSize(500, 607);
+	Windows::getInstance().setEnableRecover(true);
+	Windows::getInstance().setRounded(0.04f);
+
 }
 
 void Register::close()

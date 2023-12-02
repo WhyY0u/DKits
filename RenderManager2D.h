@@ -494,6 +494,53 @@ private:
     unsigned int VAO, VBO;
     GLuint vertexShaderId, fragmentShaderId, shaderProgram;
 };
+class FrameBuffer {
+public:
+    FrameBuffer(float width, float height) {
+        glGenFramebuffers(1, &framebuffer);
+        glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+
+        glGenTextures(1, &texture);
+        glBindTexture(GL_TEXTURE_2D, texture);
+
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 0);
+
+        if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
+            std::cerr << "Framebuffer is not complete!" << std::endl;
+        }
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    }
+    void renderTexture(GLuint Texture) {
+        glActiveTexture(Texture);
+        glBindTexture(GL_TEXTURE_2D, texture);
+    }
+    void StartRead() {
+        glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+    }
+    void StopRead() {
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    }
+    ~FrameBuffer() {
+        glDeleteFramebuffers(1, &framebuffer);
+        glDeleteTextures(1, &texture);
+    }
+
+    GLuint getTexture() {
+        return texture;
+    }
+
+private:
+    GLuint texture;
+    GLuint framebuffer;
+
+};
+
 class RenderUtils {
 public:
     static RenderUtils& getInstance() {
@@ -511,6 +558,35 @@ public:
             return "Unknown";
         }
     }
+    void drawImageAlpha(const char* str, float x, float y, float width, float height, float alpha) {
+        std::vector<float> vertex = {
+       x, y, 0.0f, 0.0f, 0.0f,
+       x + width, y, 0.0f, 1.0f, 0.0f,
+       x + width, y + height, 0.0f, 1.0f, 1.0f,
+       x, y + height, 0.0f, 0.0f, 1.0f
+        };
+        std::vector<unsigned int> indices = {
+           0, 1, 2,
+           2, 3, 0
+        };
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
+        RenderManager* manager = new RenderManager("C:/Users/User/Desktop/APISystem/DKIT/Project1/shader/Vertex/Vertex.vert", "C:/Users/User/Desktop/APISystem/DKIT/Project1/shader/Texture/ImageAlpha.frag", vertex, indices);
+        manager->PreRender();
+        manager->loadTexture(str, width, height);
+        manager->useShader(screenWidth, screenHeight);
+        manager->renderTexture();
+        manager->setUniform1f("sampler", GL_TEXTURE0);
+        manager->setUniform1f("alpha", alpha);
+        manager->Render();
+        manager->deleteTexture();
+        manager->StopRender();
+        delete manager;
+        vertex.resize(0);
+        vertex.shrink_to_fit();
+        indices.resize(0);
+        indices.shrink_to_fit();
+    }
     void drawTripleGradient(float x, float y, float width, float height, Color color, Color color2, Color color3, float radius, float alpha) {
         std::vector<float> vertex = {
       x, y, 0.0f, 0.0f, 0.0f,
@@ -524,7 +600,6 @@ public:
         };
         glEnable(GL_BLEND);
         glDisable(GL_ALPHA_TEST);
-        
         RenderManager* manager = new RenderManager("C:/Users/User/Desktop/APISystem/DKIT/Project1/shader/Vertex/Vertex.vert", "C:/Users/User/Desktop/APISystem/DKIT/Project1/shader/React/TripleGradient.frag", vertex, indices);
         manager->PreRender();
         manager->useShader(screenWidth, screenHeight);
@@ -533,7 +608,6 @@ public:
         manager->setUniform3f("color3", color3.getRed(), color3.getGreen(), color3.getBlue());
         manager->setUniform1f("radius", radius);
         manager->setUniform1f("alpha", alpha);
-
         manager->Render();
         manager->StopRender();
         delete manager;
@@ -647,7 +721,6 @@ public:
         indices.shrink_to_fit();
 
     }
-
     void drawTexture(const char* str, float x, float y, float width, float height) {
         std::vector<float> vertex = {
         x, y, 0.0f, 0.0f, 0.0f,
@@ -675,6 +748,56 @@ public:
         vertex.shrink_to_fit();
         indices.resize(0);
         indices.shrink_to_fit();
+
+    }
+    void drawGlowTexture(const char* str, float x, float y, float width, float height) {
+        FrameBuffer* buffer = new FrameBuffer(screenWidth, screenHeight);
+        buffer->StartRead();
+        drawTexture(str, x, y, width, height);
+        buffer->StopRead();
+
+
+        std::vector<float> vertex = {
+     0, 0, 0.0f, 0.0f, 0.0f,
+     0 + screenWidth, 0, 0.0f, 1.0f, 0.0f,
+     0 + screenWidth, 0 + screenHeight, 0.0f, 1.0f, 1.0f,
+     0, 0 + screenHeight, 0.0f, 0.0f, 1.0f
+        };
+        std::vector<unsigned int> indices = {
+           0, 1, 2,
+           2, 3, 0
+        };
+
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
+        RenderManager* BloomEffect = new RenderManager("C:/Users/User/Desktop/APISystem/DKIT/Project1/shader/Vertex/Vertex.vert", "C:/Users/User/Desktop/APISystem/DKIT/Project1/shader/Texture/ImageMIX.frag", vertex, indices);
+
+        RenderManager* manager = new RenderManager("C:/Users/User/Desktop/APISystem/DKIT/Project1/shader/Vertex/Vertex.vert", "C:/Users/User/Desktop/APISystem/DKIT/Project1/shader/Texture/ImageGlow.frag", vertex, indices);
+        manager->PreRender();
+        manager->useShader(screenWidth, screenHeight);
+        buffer->renderTexture(GL_TEXTURE0);
+        manager->setUniform1i("sampler", GL_TEXTURE0);
+        manager->Render();
+        manager->StopRender();
+
+        BloomEffect->PreRender();
+        BloomEffect->loadTexture(str, width, height);
+        BloomEffect->useShader(screenWidth, screenHeight);
+        buffer->renderTexture(GL_TEXTURE2);
+        BloomEffect->renderTexture();
+        BloomEffect->setUniform1i("scene", GL_TEXTURE0);
+        BloomEffect->setUniform1i("bloomBlur", GL_TEXTURE2);
+        BloomEffect->Render();
+        BloomEffect->deleteTexture();
+        BloomEffect->StopRender();
+
+        delete manager;
+        delete BloomEffect;
+        vertex.resize(0);
+        vertex.shrink_to_fit();
+        indices.resize(0);
+        indices.shrink_to_fit();
+        delete buffer;
 
     }
     void drawFrameBuffer(GLuint texture, float x, float y, float width, float height, float textureWidth, float textureHeight) {
@@ -712,38 +835,5 @@ private:
     RenderUtils() : screenWidth(800), screenHeight(600) {}
     RenderUtils(const RenderUtils&) = delete;
     void operator=(const RenderUtils&) = delete;
-};
-class FrameBuffer {
-public:
-    FrameBuffer(float width, float height) {
-        glGenFramebuffers(1, &framebuffer);
-        glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
-        glGenTextures(1, &texture);
-        glBindTexture(GL_TEXTURE_2D, texture);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
-        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 0);
-        glBindFramebuffer(GL_FRAMEBUFFER, 0);
-    }
-
-    void StartRead() {
-        glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
-    }
-    void StopRead() {
-        glBindFramebuffer(GL_FRAMEBUFFER, 0);
-    }
-    ~FrameBuffer() {
-        GLuint framebuffer;
-        glGenFramebuffers(1, &framebuffer);
-        glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
-    }
-
-    GLuint getTexture() {
-        return texture;
-    }
-
-private:
-    GLuint texture;
-    GLuint framebuffer;
-
 };
 
