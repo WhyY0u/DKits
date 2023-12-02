@@ -131,6 +131,14 @@ float* ScreenSize() {
 void setBarX(float BarX) {
 	this->BarX = BarX;
 }
+void setWindowsSize(float width, float height) {
+	HWND hwnd = GetActiveWindow();
+	SetWindowPos(hwnd, NULL, 0, 0, width, height, SWP_NOZORDER);
+	glViewport(0, 0, width, height);
+	RenderUtils::getInstance().screenHeight = height;
+	RenderUtils::getInstance().screenWidth = width;
+
+}
 void setBarY(float BarY) {
 	this->BarY = BarY;
 }

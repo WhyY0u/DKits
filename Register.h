@@ -1,7 +1,9 @@
 #include "Scene.h"
 class Register : public Scene {
 public:
-	Register(std::string name) : Scene(name) {};
+	Register(std::string name) : Scene(name) {
+		init();
+	};
 	void render(FT_Library ft) override;
 	void init() override;
 	void close() override;

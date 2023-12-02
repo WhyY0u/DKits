@@ -5,8 +5,9 @@
 #include<cstdlib>
 #include "Random.h"
 typedef struct {
-	float x;
-	Color color;
+	vec2 pos;
+	float alpha;
+	float width;
 }Particle;
 typedef struct {
 	vec2 position;
@@ -16,7 +17,9 @@ typedef struct {
 }Planet;
 class Loading : public Scene {
 public:
-	Loading(std::string name) : Scene(name) {};
+	Loading(std::string name) : Scene(name){
+		init();
+	};
 	void render(FT_Library ft) override;
 	void init() override;
 	void close() override;
@@ -86,9 +89,41 @@ public:
 			if (plaent->position.x < -200)  pl.erase(pl.begin() + i);
 		}
 	}
-	void renderParticle(float max, float x, float y, float height, float width) {
+	void addParticle(float max, float x, float y, float height, float x2) {
 		if (Particles.size() < max) {
+			if (Particles.size() == 0) {
+				Particle* part = new Particle();
+				part->pos = vec2(0, Random::getInstance().getRandomFloat(y, y + height));
+				part->alpha = 1.0f;
+				part->width = Random::getInstance().getRandomFloat(15, 40);
+				Particles.push_back(part);
+			} else {
+				Particle* p = Particles.back();
+				if (std::abs((p->pos.x + x) - x) >= 30) {
+					float ys = Random::getInstance().getRandomFloat(y, y + height);
+					if (std::abs(p->pos.y - ys) >= 15) {
+						Particle* part = new Particle();
+						part->pos = vec2(0, ys);
+						part->alpha = 1.0f;
+						part->width = Random::getInstance().getRandomFloat(15, 40);
+						Particles.push_back(part);
+					}
+
+				}
+
+
+			}
 			
 	  }
+		for (int i = 0; i < Particles.size(); i++) {
+			Particle* partic = Particles[i];
+			RenderUtils::getInstance().drawImageAlpha("C:/Users/User/Desktop/APISystem/DKIT/Project1/img/particle.png", (-partic->pos.x) + x, partic->pos.y, partic->width, 8, partic->alpha);
+			partic->pos.x += 6;
+			float alpha = (0.0 - 1.0) / (x2 - 0.0) * (partic->pos.x - 0.0) + 1.0;
+			partic->alpha = alpha;
+			if (-partic->pos.x < (-x2 - 130))  Particles.erase(Particles.begin() + i);
+		}
 	}
+	
+
 };
