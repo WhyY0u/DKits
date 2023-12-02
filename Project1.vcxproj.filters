@@ -22,6 +22,9 @@
     <Filter Include="Исходные файлы\Scene">
       <UniqueIdentifier>{02c3736d-bc09-4ba5-8151-158e7fb7bb4c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Исходные файлы\Math">
+      <UniqueIdentifier>{6527bf53-64ef-4650-a719-697bf1695236}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Project1.cpp">
@@ -73,6 +76,12 @@
     </ClInclude>
     <ClInclude Include="Loading.h">
       <Filter>Исходные файлы\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Math.h">
+      <Filter>Исходные файлы\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Random.h">
+      <Filter>Исходные файлы\Math</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

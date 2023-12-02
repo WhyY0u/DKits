@@ -1,5 +1,6 @@
 #pragma once
 #include "Menu.h"
+#include "Loading.h"
 #include "MouseHelper.h"
 #include <glfw3.h>
 #include <Windows.h>
@@ -15,6 +16,7 @@ typedef struct {
 	float x, y;
 	const char* image;
 }Button;
+
 class Windows {
 public:
 bool outline;

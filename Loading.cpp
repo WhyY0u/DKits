@@ -1,5 +1,9 @@
 #include "Loading.h"
 void Loading::render(FT_Library ft) {
+	RenderPlanet();
+	Planets(10);
+	RenderUtils::getInstance().drawTexture("C:/Users/User/Desktop/APISystem/DKIT/Project1/img/logo.png", 220, 170, 400, 250);
+
 }
 
 void Loading::init()

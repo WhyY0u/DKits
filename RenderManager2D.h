@@ -28,7 +28,8 @@ public:
         green = 0.0f;
         blue = 0.0f;
     };
-    Color(float red, float green, float blue) : red(red), green(green), blue(blue) {}
+    Color(float red, float green, float blue) : red(red), green(green), blue(blue), alpha(1.0f) {}
+    Color(float red, float green, float blue, float alpha) : red(red), green(green), blue(blue), alpha(alpha) {}
     Color(std::string hex) {
         if (hex.size() != 7 && hex.size() != 9) {
             std::cerr << "Invalid HEX color format." << std::endl;
@@ -37,28 +38,44 @@ public:
         std::istringstream iss(hex.substr(1));
         unsigned int hexValue;
         iss >> std::hex >> hexValue;
-        Color::red = static_cast<float>((hexValue >> 16) & 0xFF) / 255.0f;
-        Color::green = static_cast<float>((hexValue >> 8) & 0xFF) / 255.0f;
-        Color::blue = static_cast<float>(hexValue & 0xFF) / 255.0f;
+        red = static_cast<float>((hexValue >> 16) & 0xFF) / 255.0f;
+        green = static_cast<float>((hexValue >> 8) & 0xFF) / 255.0f;
+        blue = static_cast<float>(hexValue & 0xFF) / 255.0f;
+        if (hex.size() == 9) {
+            alpha = static_cast<float>((hexValue >> 24) & 0xFF) / 255.0f;
+        }
+        else {
+            alpha = 1.0f;
+        }
     }
     Color(int rgb) {
         int red = (rgb >> 16) & 0xFF;
         int green = (rgb >> 8) & 0xFF;
         int blue = rgb & 0xFF;
+        int alpha = (rgb >> 24) & 0xFF;
+
         float redNormalized = static_cast<float>(red) / 255.0f;
         float greenNormalized = static_cast<float>(green) / 255.0f;
         float blueNormalized = static_cast<float>(blue) / 255.0f;
-        Color::red = redNormalized;
-        Color::green = greenNormalized;
-        Color::blue = blueNormalized;
+        float alphaNormalized = static_cast<float>(alpha) / 255.0f;
+
+        this->red = redNormalized;
+        this->green = greenNormalized;
+        this->blue = blueNormalized;
+        this->alpha = alphaNormalized;
+
     }
     void setRGB(int rgb) {
         int red = (rgb >> 16) & 0xFF;
         int green = (rgb >> 8) & 0xFF;
         int blue = rgb & 0xFF;
-        Color::red = red;
-        Color::green = green;
-        Color::blue = blue;
+        int alpha = (rgb >> 24) & 0xFF;
+
+        this->red = red;
+        this->green = green;
+        this->blue = blue;
+        this->alpha = alpha;
+
     }
     void setHex(std::string hex) {
         if (hex.size() != 7 && hex.size() != 9) {
@@ -68,9 +85,15 @@ public:
         std::istringstream iss(hex.substr(1));
         unsigned int hexValue;
         iss >> std::hex >> hexValue;
-        Color::red = static_cast<float>((hexValue >> 16) & 0xFF) / 255.0f;
-        Color::green = static_cast<float>((hexValue >> 8) & 0xFF) / 255.0f;
-        Color::blue = static_cast<float>(hexValue & 0xFF) / 255.0f;
+        red = static_cast<float>((hexValue >> 16) & 0xFF) / 255.0f;
+        green = static_cast<float>((hexValue >> 8) & 0xFF) / 255.0f;
+        blue = static_cast<float>(hexValue & 0xFF) / 255.0f;
+        if (hex.size() == 9) {
+            alpha = static_cast<float>((hexValue >> 24) & 0xFF) / 255.0f;
+        }
+        else {
+            alpha = 1.0f;
+        }
     }
     float getRed()
     {
@@ -84,25 +107,30 @@ public:
     {
         return blue;
     }
+    float getAlpha() {
+        return alpha;
+    }
     void setRed(float red) {
-        red = red;
+        this->red = red;
     }
     void setGreen(float green) {
-        green = green;
+        this->green = green;
     }
     void setBlue(float blue) {
-        blue = blue;
+        this->blue = blue;
+    }
+    void setAlpha(float alpha) {
+        this->alpha = alpha;
     }
     int getRGB() {
         int redInt = static_cast<int>(red * 255.0f);
         int greenInt = static_cast<int>(green * 255.0f);
         int blueInt = static_cast<int>(blue * 255.0f);
-
         int rgb = (redInt << 16) | (greenInt << 8) | blueInt;
         return rgb;
     }
 private:
-    float red, green, blue;
+    float red, green, blue, alpha;
 };
 class RenderManager {
 
@@ -600,6 +628,8 @@ public:
            0, 1, 2,
            2, 3, 0
         };
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
         RenderManager* manager = new RenderManager("C:/Users/User/Desktop/APISystem/DKIT/Project1/shader/Vertex/Vertex.vert", "C:/Users/User/Desktop/APISystem/DKIT/Project1/shader/Texture/ImageShadow.frag", vertex, indices);
         manager->PreRender();
         manager->loadTexture(str, width, height);
@@ -629,6 +659,8 @@ public:
            0, 1, 2,
            2, 3, 0
         };
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
         RenderManager* manager = new RenderManager("C:/Users/User/Desktop/APISystem/DKIT/Project1/shader/Vertex/Vertex.vert", "C:/Users/User/Desktop/APISystem/DKIT/Project1/shader/Texture/Image.frag", vertex, indices);
         manager->PreRender();
         manager->loadTexture(str, width, height);

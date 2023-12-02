@@ -164,8 +164,10 @@
     <ClInclude Include="GLFWHelper.h" />
     <ClInclude Include="include\stb_image.h" />
     <ClInclude Include="Loading.h" />
+    <ClInclude Include="Math.h" />
     <ClInclude Include="Menu.h" />
     <ClInclude Include="MouseHelper.h" />
+    <ClInclude Include="Random.h" />
     <ClInclude Include="Register.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="WindowsHelper.h" />
