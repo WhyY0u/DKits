@@ -516,8 +516,8 @@ public:
         }
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
     }
-    void renderTexture(GLuint Texture) {
-        glActiveTexture(Texture);
+    void renderTexture(GLuint t) {
+        glActiveTexture(t);
         glBindTexture(GL_TEXTURE_2D, texture);
     }
     void StartRead() {
@@ -770,8 +770,6 @@ public:
 
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
-        RenderManager* BloomEffect = new RenderManager("C:/Users/User/Desktop/APISystem/DKIT/Project1/shader/Vertex/Vertex.vert", "C:/Users/User/Desktop/APISystem/DKIT/Project1/shader/Texture/ImageMIX.frag", vertex, indices);
-
         RenderManager* manager = new RenderManager("C:/Users/User/Desktop/APISystem/DKIT/Project1/shader/Vertex/Vertex.vert", "C:/Users/User/Desktop/APISystem/DKIT/Project1/shader/Texture/ImageGlow.frag", vertex, indices);
         manager->PreRender();
         manager->useShader(screenWidth, screenHeight);
@@ -779,20 +777,7 @@ public:
         manager->setUniform1i("sampler", GL_TEXTURE0);
         manager->Render();
         manager->StopRender();
-
-        BloomEffect->PreRender();
-        BloomEffect->loadTexture(str, width, height);
-        BloomEffect->useShader(screenWidth, screenHeight);
-        buffer->renderTexture(GL_TEXTURE2);
-        BloomEffect->renderTexture();
-        BloomEffect->setUniform1i("scene", GL_TEXTURE0);
-        BloomEffect->setUniform1i("bloomBlur", GL_TEXTURE2);
-        BloomEffect->Render();
-        BloomEffect->deleteTexture();
-        BloomEffect->StopRender();
-
         delete manager;
-        delete BloomEffect;
         vertex.resize(0);
         vertex.shrink_to_fit();
         indices.resize(0);
