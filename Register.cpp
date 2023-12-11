@@ -2,7 +2,7 @@
 #include "Register.h"
 #include "WindowsHelper.h"
 void Register::render(FT_Library ft) {
-	RenderUtils::getInstance().drawTextureAttenuation("C:/Users/User/Desktop/APISystem/DKIT/Project1/img/logo.png", 260, 125, 270, 160);
+	RenderUtils::getInstance().drawTextureAttenuation("C:/Users/User/Desktop/APISystem/DKIT/Project1/img/logo.png", 260, 125, 270, 160, 3.0f, 17.1f, 8);
 	//RenderUtils::getInstance().drawText(220, 54, InterBold, L"Dissimilate", ft, 19, Color("#FFFFFF"), 1.0f);
 }
 
