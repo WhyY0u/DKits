@@ -8,8 +8,10 @@ uniform vec2 scale;
 uniform sampler2D atlasSampler;
 uniform vec4 textureInfo;
 uniform float alpha;
+uniform sampler2D sampler;
+
 void main() {
     vec2 atlasTexCoord = ((TexCoord * textureSize) + textureInfo.xy) * scale  / textureSize;
     vec4 texColor = texture(atlasSampler, atlasTexCoord);
     FragColor = vec4(texColor.rgb, alpha);
-  }
+}
