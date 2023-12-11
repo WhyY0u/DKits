@@ -1,14 +1,33 @@
 #version 330 core
-
 in vec2 TexCoord;
 out vec4 FragColor;
 
-uniform vec3 color;
-uniform vec3 ShadowColor;
+#define TX vec2(TexCoord.x, 1.0 - TexCoord.y)
 
 uniform sampler2D sampler;
+uniform float blurRadius;
+uniform float alpha;
+uniform float total;
+
+uniform vec3 color;
 
 void main() {
-    vec4 texColor = texture(sampler, TexCoord);
-    FragColor = vec4(color, texColor.a);
+    vec2 tex_offset = 1.0 / textureSize(sampler, 0);
+    vec4 blurredColor = vec4(color,0.0);
+    float totalWeight = 0.0;
+
+    for (float i = -blurRadius; i <= blurRadius; i += 1.0) {
+         float distance;
+         float is = i * i;
+        for (float j = -blurRadius; j <= blurRadius; j += 1.0) {
+            distance = sqrt(is + j * j);
+            if (distance <= blurRadius) {
+                float weight = 1.0 - (distance / blurRadius);
+                blurredColor += vec4(color, texture(sampler, TX + vec2(tex_offset.x * i, tex_offset.y * j)).a) * weight;
+                totalWeight += weight;
+            }
+        }
+    }
+
+    FragColor = vec4(blurredColor.rgb, blurredColor.a * alpha) / totalWeight * total;
 }

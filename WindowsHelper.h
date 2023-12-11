@@ -40,8 +40,8 @@ GLFWwindow* createWindow(float x, float y, float screenWidth, float screenHeight
 	this->ft = ft;
 	this->outlinecolor = Color("#FFFFFF");
 	BarStep = 25.0f;
-	RenderUtils::getInstance().screenHeight = screenHeight;
 	RenderUtils::getInstance().screenWidth = screenWidth;
+	RenderUtils::getInstance().screenHeight = screenHeight;
 
 	EnableFontRender();
 	addButtonBar(7, 15, 2, "C:/Users/User/Desktop/APISystem/DKIT/Project1/img/rollup.png", Color("#2E2E2E"), Color("#B7B0B0"), RollUp);
@@ -54,10 +54,12 @@ FreeConsole();
 HWND console = GetConsoleWindow();
 SendMessage(console, WM_CLOSE, 0, 0);
 }
+
 void tick() {
 	MouseUpdate();
 	screenWidth = RenderUtils::getInstance().screenWidth;
 	screenHeight = RenderUtils::getInstance().screenHeight;
+
 }
 void mouseClicked(int button, int action) {
 	if (button == 0 && action == 1) {
@@ -67,10 +69,13 @@ void mouseClicked(int button, int action) {
 	scene->mouseClicked(button, action);
 
 }
+void init() {
+	RenderUtils::getInstance().initRenderUtils();
+}
 void Render2D() {
 	if (outline) {
 		RenderUtils::getInstance().Rect(0, 0, screenWidth, screenHeight, outlinecolor, outlinecolor, outlinecolor, outlinecolor, rounded, 1.0f);
-		RenderUtils::getInstance().Rect(1, 1, screenWidth - 1, screenHeight - 1, color, color, color, color, rounded, 1.0f);
+		RenderUtils::getInstance().Rect(1, 1, screenWidth - 2, screenHeight - 2, color, color, color, color, rounded, 1.0f);
 	}
 	else {
 		RenderUtils::getInstance().Rect(0, 0, screenWidth, screenHeight, color, color, color, color, rounded, 1.0f);

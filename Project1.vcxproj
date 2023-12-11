@@ -162,6 +162,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GLFWHelper.h" />
+    <ClInclude Include="ImageHelper.h" />
     <ClInclude Include="include\stb_image.h" />
     <ClInclude Include="Loading.h" />
     <ClInclude Include="Math.h" />

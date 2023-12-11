@@ -1,5 +1,6 @@
 ﻿#include "WindowsHelper.h"
 #include <Windows.h>
+#include "Register.h"
 FT_Library ft;
 Windows& windows = Windows::getInstance();
 void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
@@ -69,6 +70,9 @@ int main() {
     }
 
     glfwMakeContextCurrent(windows.getWindows());
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    glfwSwapInterval(0);
+
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
         return -1;
     }
@@ -76,22 +80,32 @@ int main() {
     HWND hwnd = GetActiveWindow();
     SetWindowLongPtr(hwnd, GWLP_WNDPROC, (LONG_PTR)WindowProc);
     ShowWindow(hwnd, SW_SHOW);
-    while (!glfwWindowShouldClose(windows.getWindows())) {
-        windows.tick();
+    double lastTime = 0.0;
+    int frameCount = 0;
+    windows.init();
+    while (!glfwWindowShouldClose(windows.getWindows())) {\
+        double time = glfwGetTime();
+        double deltaTime = time - lastTime;
 
-        glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
-        glEnable(GL_BLEND);
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-        glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
+            windows.tick();
+            glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+            glEnable(GL_BLEND);
+            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+            glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
 
-        windows.Render2D();
-  
-        glfwSwapBuffers(windows.getWindows());
-        glfwPollEvents();
-    
+            windows.Render2D();
 
+            glfwSwapBuffers(windows.getWindows());
+            glfwPollEvents();
+            frameCount++;
+            if (time - lastTime >= 1.0) {
+                double fps = frameCount / (time - lastTime);
+                std::cout << "FPS: " << fps << std::endl;
+                frameCount = 0;
+                lastTime = time;
+            }
     }
-
+    glfwDestroyWindow(windows.getWindows());
     glfwTerminate();
 
     return 0;

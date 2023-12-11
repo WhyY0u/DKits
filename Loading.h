@@ -13,7 +13,6 @@ typedef struct {
 	vec2 position;
 	std::string figure;
 	float rotate;
-	Color color;
 }Planet;
 class Loading : public Scene {
 public:
@@ -58,7 +57,6 @@ public:
 			if (pl.size() == 0) {
 				vec2 pos = vec2(x, y);
 				Planet* p = new Planet();
-				p->color = Color(Random::getInstance().getRandomFloat(0, 255) / 255, Random::getInstance().getRandomFloat(0, 255) / 255, Random::getInstance().getRandomFloat(0, 255) / 255);
 				p->figure = getRandomFigure(Random::getInstance().getRandomInt(1, 5));
 				p->position = pos;
 				p->rotate = Random::getInstance().getRandomFloat(0.0f, 360.0f);
@@ -69,7 +67,6 @@ public:
 				if (std::abs(p->position.x - x) >= 100) {
 					vec2 pos = vec2(x, y);
 					Planet* p = new Planet();
-					p->color = Color("#272725");
 					p->figure = getRandomFigure(Random::getInstance().getRandomInt(1, 5));
 					p->position = pos;
 					p->rotate = Random::getInstance().getRandomFloat(0.0f, 360.0f);
@@ -83,7 +80,7 @@ public:
 		for (int i = 0; i < pl.size(); i++) {
 			Planet* plaent = pl[i];
 			bool check = plaent->figure == "C:/Users/User/Desktop/APISystem/DKIT/Project1/img/triangele.png";
-			RenderUtils::getInstance().drawTextureColor(plaent->figure.c_str(), plaent->position.x, plaent->position.y, 50, check ? 47 : 50, plaent->color);
+			RenderUtils::getInstance().drawTextureColor(plaent->figure.c_str(), plaent->position.x, plaent->position.y, 50, check ? 47 : 50,  Color("#272725"));
 			plaent->position.x -= 10;
 			
 			if (plaent->position.x < -200)  pl.erase(pl.begin() + i);
@@ -117,7 +114,7 @@ public:
 	  }
 		for (int i = 0; i < Particles.size(); i++) {
 			Particle* partic = Particles[i];
-			RenderUtils::getInstance().drawImageAlpha("C:/Users/User/Desktop/APISystem/DKIT/Project1/img/particle.png", (-partic->pos.x) + x, partic->pos.y, partic->width, 8, partic->alpha);
+			RenderUtils::getInstance().drawTextureAlpha("C:/Users/User/Desktop/APISystem/DKIT/Project1/img/particle.png", (-partic->pos.x) + x, partic->pos.y, partic->width, 8, partic->alpha);
 			partic->pos.x += 6;
 			float alpha = (0.0 - 1.0) / (x2 - 0.0) * (partic->pos.x - 0.0) + 1.0;
 			partic->alpha = alpha;
