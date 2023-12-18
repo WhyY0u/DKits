@@ -1,6 +1,6 @@
 #include "Loading.h"
 
-void Loading::render(FT_Library ft) {
+void Loading::render() {
     RenderPlanet();
 	Planets(10);
 	addParticle(10, 380, 260, 60, 150);

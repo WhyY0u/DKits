@@ -25,6 +25,7 @@ enum Font {
     InterLight,
     InterBold,
 };
+
 class Color {
 public:
     Color() {
@@ -149,7 +150,7 @@ public:
         if (!compileShader(VertexShader, GL_VERTEX_SHADER, vertexShaderSource) ||
             !compileShader(FragmentShader, GL_FRAGMENT_SHADER, fragmentShaderSource) ||
             !linkProgram(ShaderProgram, VertexShader, FragmentShader)) {
-            std::cerr << "Shader creation failed!" << std::endl;
+            std::cerr << "Shader creation failed!" + ShaderURL << std::endl;
             ShaderProgram = 0;
         }
         delete vertexShaderSource;
@@ -306,6 +307,326 @@ struct Character {
     glm::ivec2   Bearing;
     unsigned int Advance;
 };
+struct Characters {
+    unsigned int TextureID;
+    glm::ivec2   Size;
+    glm::ivec2   Bearing;
+    unsigned int Advance;
+    float fontsize;
+};
+struct FontInfo {
+    FT_Face face;
+    std::map<wchar_t, Characters> characters;
+    std::vector<GLuint> textureDel;
+    std::string urlFont;     
+};
+class NewFontRender {
+public:
+    NewFontRender(FT_Library ft): ft(ft) {
+        vertexShaderId = glCreateShader(GL_VERTEX_SHADER);
+        fragmentShaderId = glCreateShader(GL_FRAGMENT_SHADER);
+
+        const char* vertexShaderSource = readShaderFile("C:/Users/User/Desktop/APISystem/DKIT/Project1/shader/Vertex/VertexText.vert");
+        const char* fragmentShaderSource = readShaderFile("C:/Users/User/Desktop/APISystem/DKIT/Project1/shader/Text/text.frag");
+
+        if (!compileShader(vertexShaderId, GL_VERTEX_SHADER, vertexShaderSource) ||
+            !compileShader(fragmentShaderId, GL_FRAGMENT_SHADER, fragmentShaderSource) ||
+            !linkProgram(shaderProgram, vertexShaderId, fragmentShaderId)) {
+            std::cerr << "Shader creation failed!" << std::endl;
+            shaderProgram = 0;
+        }
+        std::cout << "Suces Compiled Shader" << std::endl;
+        delete[] vertexShaderSource;
+        delete[] fragmentShaderSource;
+        glDeleteShader(vertexShaderId);
+        glDeleteShader(fragmentShaderId);
+        glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+
+        glGenVertexArrays(1, &VAO);
+        glGenBuffers(1, &VBO);
+        glBindVertexArray(VAO);
+        glBindBuffer(GL_ARRAY_BUFFER, VBO);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 6 * 4, NULL, GL_DYNAMIC_DRAW);
+        glEnableVertexAttribArray(0);
+        glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), 0);
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+        glBindVertexArray(0);
+    
+    };
+
+    std::string getFont(Font font) {
+        switch (font) {
+        case InterBold:
+            return "C:/Users/User/Desktop/APISystem/DKIT/Project1/font/InterBold.ttf";
+        case InterLight:
+            return "C:/Users/User/Desktop/APISystem/DKIT/Project1/font/InterLight.ttf";
+        default:
+            return "Unknown";
+        }
+    }
+    FT_Library getFontLibrary() {
+        return ft;
+    }
+    void renderText(Font font, std::wstring text, float x, float y, float fontsize, float scale, Color color, float screenWidth, float screenHeight) {
+
+        FontInfo f;
+        std::map<Font, FontInfo>::iterator textur = fonts.find(font);
+        if (textur == fonts.end()) {
+           f = createFont(font, getFont(font));
+           createTexture(f, fontsize, text, font);
+        } else {
+            f = textur->second;
+                updateTextureSize(font, f, text, fontsize);
+            
+        }
+
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
+        glActiveTexture(GL_TEXTURE0);
+        glUseProgram(shaderProgram);
+        glm::mat4 projectionMatrix = glm::ortho(0.0f, screenWidth, screenHeight, 0.0f, -1.0f, 1.0f);
+        int projectionLoc = glGetUniformLocation(shaderProgram, "projection");
+        int colorLoc = glGetUniformLocation(shaderProgram, "color");
+        int alphaLoc = glGetUniformLocation(shaderProgram, "alpha");
+        glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projectionMatrix));
+        glUniform3f(colorLoc, color.getRed(), color.getGreen(), color.getBlue());
+        glUniform1f(alphaLoc, color.getAlpha());
+        glActiveTexture(GL_TEXTURE0);
+        glBindVertexArray(VAO);
+        std::wstring::const_iterator c;
+        for (c = text.begin(); c != text.end(); c++)
+        {
+            Characters ch = f.characters[*c];
+
+            float xpos = x + ch.Bearing.x * scale;
+            float ypos = y - ch.Bearing.y * scale;
+
+            float w = ch.Size.x * scale;
+            float h = ch.Size.y * scale;
+            float vertices[6][4] = {
+                { xpos,     ypos + h,   0.0f, 0.0f },
+                { xpos,     ypos,       0.0f, 1.0f },
+                { xpos + w, ypos,       1.0f, 1.0f },
+
+                { xpos,     ypos + h,   0.0f, 0.0f },
+                { xpos + w, ypos,       1.0f, 1.0f },
+                { xpos + w, ypos + h,   1.0f, 0.0f }
+            };
+
+            glBindTexture(GL_TEXTURE_2D, ch.TextureID);
+
+            glBindBuffer(GL_ARRAY_BUFFER, VBO);
+            glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices);
+            glBindBuffer(GL_ARRAY_BUFFER, 0);
+            glDrawArrays(GL_TRIANGLES, 0, 6);
+            x += (ch.Advance >> 6) * scale;
+        }
+        glBindVertexArray(0);
+        glBindTexture(GL_TEXTURE_2D, 0);
+
+         
+    }
+   
+
+    void delteFont(Font font) {
+        std::map<Font, FontInfo>::iterator texturs = fonts.find(font);
+        texturs->second.characters.clear();
+        for (int i = 0; i < texturs->second.textureDel.size(); i++) {
+            glDeleteTextures(1, &texturs->second.textureDel[i]);
+        }
+        FT_Done_Face(texturs->second.face);
+    }
+
+    void ClearAll() {
+        for (auto it = fonts.begin(); it != fonts.end(); it++) {
+            FT_Done_Face(it->second.face);
+            for (int i = 0; i < it->second.textureDel.size(); i++) {
+                glDeleteTextures(1, &it->second.textureDel[i]);
+            }
+        }
+    }
+
+private:
+
+    FontInfo createFont(Font font, std::string urlFont) {
+        /*Если фонта нет в списе вызываем этот метод и возращает все готовое*/
+        FontInfo info = FontInfo();
+        FT_Face face;
+        info.urlFont = urlFont;
+        if (FT_New_Face(ft, urlFont.c_str(), 0, &face)) {
+            std::cout << "Ошибка не удалось создать FT_Face Для " + urlFont << std::endl;
+        }
+        info.face = face;
+        return info;
+    }
+
+    void createTexture(FontInfo info, float size, std::wstring text, Font font) {
+
+        FT_Set_Pixel_Sizes(info.face, 0, size);
+
+        for (unsigned int i = 0; i < text.size(); i++) {
+            wchar_t c = text[i];
+            if (FT_Load_Char(info.face, (FT_ULong)text[i], FT_LOAD_RENDER)) {
+                FT_Error error = FT_Load_Char(info.face, (FT_ULong)text[i], FT_LOAD_RENDER);
+                std::cout << error << std::endl;
+                continue;
+            }
+            unsigned int texture;
+            glGenTextures(1, &texture);
+            glBindTexture(GL_TEXTURE_2D, texture);
+            glTexImage2D(
+                GL_TEXTURE_2D,
+                0,
+                GL_RED,
+                info.face->glyph->bitmap.width,
+                info.face->glyph->bitmap.rows,
+                0,
+                GL_RED,
+                GL_UNSIGNED_BYTE,
+                info.face->glyph->bitmap.buffer
+            );
+            info.textureDel.push_back(texture);
+
+
+
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+            Characters character = {
+                texture,
+                glm::ivec2(info.face->glyph->bitmap.width, info.face->glyph->bitmap.rows),
+                glm::ivec2(info.face->glyph->bitmap_left, info.face->glyph->bitmap_top),
+                static_cast<unsigned int>(info.face->glyph->advance.x),
+                size,
+            };
+            info.characters.insert(std::pair<wchar_t, Characters>(c, character));
+            glBindTexture(GL_TEXTURE_2D, 0);
+        }
+        fonts.insert(std::pair<Font, FontInfo>(font, info));
+    }
+
+    void updateTextureSize(Font font, FontInfo info, std::wstring text, float size) {
+        /*Обновляем текстуру если размер изменился*/
+        FT_Set_Pixel_Sizes(info.face, 0, size);
+      
+        for (unsigned int i = 0; i < text.size(); i++) {
+            wchar_t c = text[i];
+            std::map<wchar_t, Characters>::iterator ch = info.characters.find(c);
+            if (ch != info.characters.end()) {
+                if (ch->second.fontsize == size) {
+
+                    continue;
+                }
+                if (FT_Load_Char(info.face, (FT_ULong)text[i], FT_LOAD_RENDER)) {
+                    FT_Error error = FT_Load_Char(info.face, (FT_ULong)text[i], FT_LOAD_RENDER);
+                    std::cout << error << std::endl;
+                    continue;
+                }
+                ch->second.Size = glm::ivec2(info.face->glyph->bitmap.width, info.face->glyph->bitmap.rows);
+                ch->second.Bearing = glm::ivec2(info.face->glyph->bitmap_left, info.face->glyph->bitmap_top);
+                glBindTexture(GL_TEXTURE_2D, ch->second.TextureID);
+                glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, info.face->glyph->bitmap.width, info.face->glyph->bitmap.rows, GL_RED, GL_UNSIGNED_BYTE, info.face->glyph->bitmap.buffer);
+            } else {
+                
+                if (FT_Load_Char(info.face, (FT_ULong)text[i], FT_LOAD_RENDER)) {
+                    FT_Error error = FT_Load_Char(info.face, (FT_ULong)text[i], FT_LOAD_RENDER);
+                    std::cout << error << std::endl;
+                    continue;
+                }
+                unsigned int texture;
+                glGenTextures(1, &texture);
+                glBindTexture(GL_TEXTURE_2D, texture);
+                glTexImage2D(
+                    GL_TEXTURE_2D,
+                    0,
+                    GL_RED,
+                    info.face->glyph->bitmap.width,
+                    info.face->glyph->bitmap.rows,
+                    0,
+                    GL_RED,
+                    GL_UNSIGNED_BYTE,
+                    info.face->glyph->bitmap.buffer
+                );
+
+                info.textureDel.push_back(texture);
+
+
+
+                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+                Characters character = {
+                    texture,
+                    glm::ivec2(info.face->glyph->bitmap.width, info.face->glyph->bitmap.rows),
+                    glm::ivec2(info.face->glyph->bitmap_left, info.face->glyph->bitmap_top),
+                    static_cast<unsigned int>(info.face->glyph->advance.x),
+                    size,
+                };
+                std::map<Font, FontInfo>::iterator textur = fonts.find(font);
+                textur->second.characters.insert(std::pair<wchar_t, Characters>(c, character));
+
+                
+            }
+        }
+        glBindTexture(GL_TEXTURE_2D, 0);
+    }
+    const char* readShaderFile(const std::string& filepath) {
+        std::ifstream file(filepath);
+        if (!file) {
+            std::cerr << "Failed to open file: " << filepath << std::endl;
+            return nullptr;
+        }
+
+        std::stringstream buffer;
+        buffer << file.rdbuf();
+        std::string shaderSource = buffer.str();
+
+        char* shaderSourcePtr = new char[shaderSource.length() + 1];
+
+        strcpy_s(shaderSourcePtr, shaderSource.length() + 1, shaderSource.c_str());
+
+        return shaderSourcePtr;
+    }
+    const bool compileShader(GLuint& shader, GLenum type, const char* source) {
+        glShaderSource(shader, 1, &source, nullptr);
+        glCompileShader(shader);
+
+        GLint success;
+        glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
+        if (!success) {
+            GLchar infoLog[512];
+            glGetShaderInfoLog(shader, 512, nullptr, infoLog);
+            std::cerr << "Shader compilation failed: " << infoLog << std::endl;
+            return false;
+        }
+        return true;
+    }
+    const bool linkProgram(GLuint& programID, GLuint vertexShader, GLuint fragmentShader) {
+        programID = glCreateProgram();
+        glAttachShader(programID, vertexShader);
+        glAttachShader(programID, fragmentShader);
+        glLinkProgram(programID);
+
+        GLint success;
+        glGetProgramiv(programID, GL_LINK_STATUS, &success);
+        if (!success) {
+            GLchar infoLog[512];
+            glGetProgramInfoLog(programID, 512, nullptr, infoLog);
+            std::cerr << "Shader program linking failed: " << infoLog << std::endl;
+            return false;
+        }
+        return true;
+    }
+    std::map<Font, FontInfo> fonts;
+    GLuint vertexShaderId, fragmentShaderId, shaderProgram;
+    GLuint VAO, VBO;
+    FT_Library ft;
+};
 class FontRender {
 public:
     FontRender() {  
@@ -338,6 +659,16 @@ public:
         glBindBuffer(GL_ARRAY_BUFFER, 0);
         glBindVertexArray(0);
     }
+    std::string getFont(Font font) {
+    switch (font) {
+    case InterBold:
+        return "C:/Users/User/Desktop/APISystem/DKIT/Project1/font/InterBold.ttf";
+    case InterLight:
+        return "C:/Users/User/Desktop/APISystem/DKIT/Project1/font/InterLight.ttf";
+    default:
+        return "Unknown";
+    }
+}
     float textSize;
     void renderText(std::wstring text, std::string urlFont, float x, float y, float scale, Color color, float alpha, int size, float screenWidth, float screenHeight, FT_Library ft) {
 
@@ -394,13 +725,12 @@ public:
         glBindVertexArray(0);
         glBindTexture(GL_TEXTURE_2D, 0);
         FT_Done_Face(face);
-
+    }
+    void ClearFontRender() {
         for (GLuint textureID : textureIDsToDelete) {
             glDeleteTextures(1, &textureID);
         }
         textureIDsToDelete.clear();
-
-
         Characters.clear();
     }
     void createTextures(std::wstring text) {
@@ -596,8 +926,9 @@ public:
        2, 3, 0
     };
      std::vector<float> vertex;
+     NewFontRender* newfontrender;
      FontRender* fontrender;
-     RenderManager* ImageAttenuationH;
+     RenderManager* Hyperbalic;
      RenderManager* ImageBrightness;
      RenderManager* rect;
      RenderManager* imageAlpha;
@@ -612,8 +943,19 @@ public:
 
     void initRenderUtils() {
      fontrender = new FontRender();
+
+     FT_Library ft;
+     if (FT_Init_FreeType(&ft)) {
+         std::cout << "Error FT" << std::endl;
+         glfwTerminate();
+     }
+     else {
+         std::cout << "Suces Create FT" << std::endl;
+     }
+     newfontrender = new NewFontRender(ft);
+     
      ImageBrightness = new RenderManager("C:/Users/User/Desktop/APISystem/DKIT/Project1/shader/Vertex/Vertex.vert", "C:/Users/User/Desktop/APISystem/DKIT/Project1/shader/Texture/ImageBrightness.frag", vertex, indices);
-     ImageAttenuationH = new RenderManager("C:/Users/User/Desktop/APISystem/DKIT/Project1/shader/Vertex/Vertex.vert", "C:/Users/User/Desktop/APISystem/DKIT/Project1/shader/Texture/ImageAttenuationH.frag", vertex, indices);
+     Hyperbalic = new RenderManager("C:/Users/User/Desktop/APISystem/DKIT/Project1/shader/Vertex/Vertex.vert", "C:/Users/User/Desktop/APISystem/DKIT/Project1/shader/Texture/Hyperbalic.frag", vertex, indices);
      ImageFBO = new RenderManager("C:/Users/User/Desktop/APISystem/DKIT/Project1/shader/Vertex/Vertex.vert", "C:/Users/User/Desktop/APISystem/DKIT/Project1/shader/Texture/ImageFBO.frag", vertex, indices);
      rect = new RenderManager("C:/Users/User/Desktop/APISystem/DKIT/Project1/shader/Vertex/Vertex.vert", "C:/Users/User/Desktop/APISystem/DKIT/Project1/shader/React/React.frag", vertex, indices);
      imageAlpha = new RenderManager("C:/Users/User/Desktop/APISystem/DKIT/Project1/shader/Vertex/Vertex.vert", "C:/Users/User/Desktop/APISystem/DKIT/Project1/shader/Texture/ImageAlpha.frag", vertex, indices);
@@ -627,7 +969,7 @@ public:
     }
     void ClearShader() {
         delete ImageBrightness;
-        delete ImageAttenuationH;
+        delete Hyperbalic;
         delete ImageFBO;
         delete rect;
         delete imageAlpha;
@@ -641,16 +983,7 @@ public:
 
 
     }
-    std::string getFont(Font font) {
-        switch (font) {
-        case InterBold:
-            return "C:/Users/User/Desktop/APISystem/DKIT/Project1/font/InterBold.ttf";
-        case InterLight:
-            return "C:/Users/User/Desktop/APISystem/DKIT/Project1/font/InterLight.ttf";
-        default:
-            return "Unknown";
-        }
-    }
+    
     void drawTextureAlpha(std::string str, float x, float y, float width, float height, float alpha) {
         RenderTextureHelper textureHelper = RenderTextureHelper::getInstance();
         TextureAtlas& atla = textureHelper.atlas;
@@ -665,7 +998,6 @@ public:
         };
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
-        auto lastElementIterator = atla.textures.rbegin();
         TextureInfo& value = atla.textures.find(str)->second;
         imageAlpha->UpdateVectors(vertex, indices);
         imageAlpha->PreRender();
@@ -680,10 +1012,10 @@ public:
         imageAlpha->Render();
         imageAlpha->StopRender();
     }
-
     void drawTexture(std::string str, float x, float y, float width, float height) {
         RenderTextureHelper textureHelper = RenderTextureHelper::getInstance();
         TextureAtlas& atla = textureHelper.atlas;
+
         if (atla.textures.find(str) == atla.textures.end()) {
             atla.addTexture(str);
         }
@@ -717,7 +1049,9 @@ public:
       x, y + height, 0.0f, 0.0f, 1.0f
         };
         glEnable(GL_BLEND);
-        glDisable(GL_ALPHA_TEST);
+        glEnable(GL_ALPHA_TEST);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
         tripleGradient->UpdateVectors(vertex, indices);
         tripleGradient->PreRender();
         tripleGradient->useShader(screenWidth, screenHeight);
@@ -725,13 +1059,15 @@ public:
         tripleGradient->setUniform3f("color2", color2.getRed(), color2.getGreen(), color2.getBlue());
         tripleGradient->setUniform3f("color3", color3.getRed(), color3.getGreen(), color3.getBlue());
         tripleGradient->setUniform1f("radius", radius);
+        tripleGradient->setUniform2f("size",  x + width, y + height);
         tripleGradient->setUniform1f("alpha", alpha);
         tripleGradient->Render();
         tripleGradient->StopRender();
     }
-    void drawText(float x, float y, Font font, std::wstring text, FT_Library ft, float size, Color color, float alpha) {
-        fontrender->renderText(text, getFont(font), x, y, 1.0, color, alpha, size, screenWidth, screenHeight, ft);
-      
+    
+    void drawText(float x, float y, Font font, std::wstring text, float size, Color color, float alpha) {
+       // fontrender->renderText(text, fontrender->getFont(font), x, y, 1.0, color, alpha, size, screenWidth, screenHeight, ft);
+        newfontrender->renderText(font, text, x, y, size, 1.0, color, screenWidth, screenHeight);
     }
     void RectGlow(float x, float y, float width, float height, Color color, Color color2, Color color3, Color color4, float fadeStart, float fadeEnd, float shadowSoftness, float radius) {
         vertex = {
@@ -763,7 +1099,7 @@ public:
         glowRect->Render();
         glowRect->StopRender();
     }
-    void Rect(float x, float y, float width, float height, Color color, Color color2, Color color3, Color color4, float radius, float alpha) {
+    void Rect(float x, float y, float width, float height, Color color, float radius, float alpha) {
        vertex = {
       x, y, 0.0f, 0.0f, 0.0f,
       x + width, y, 0.0f, 1.0f, 0.0f,
@@ -774,10 +1110,8 @@ public:
        rect->PreRender();
        rect->useShader(screenWidth, screenHeight);
        rect->setUniform3f("color", color.getRed(), color.getGreen(), color.getBlue());
-       rect->setUniform3f("color2", color2.getRed(), color2.getGreen(), color2.getBlue());
-       rect->setUniform3f("color3", color3.getRed(), color3.getGreen(), color3.getBlue());
-       rect->setUniform3f("color4", color4.getRed(), color4.getGreen(), color4.getBlue());
        rect->setUniform1f("radius", radius);
+       rect->setUniform2f("size", x + width, y + height);
        rect->setUniform1f("alpha", alpha);
        rect->Render();
        rect->StopRender();
@@ -841,10 +1175,10 @@ x, y + height, 0.0f, 0.0f, 1.0f
         ImageGlow->Render();
         ImageGlow->StopRender();
 
-        TextureInfo& value = atlas.textures.find(str)->second;
         if (atlas.textures.find(str) == atlas.textures.end()) {
             atlas.addTexture(str);
         }
+        TextureInfo& value = atlas.textures.find(str)->second;
         Bloom->UpdateVectors(vertex, indices);
         Bloom->PreRender();
         Bloom->useShader(screenWidth, screenHeight);
@@ -907,17 +1241,16 @@ x, y + height, 0.0f, 0.0f, 1.0f
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
 
-        ImageAttenuationH->UpdateVectors(vertex, indices);
-        ImageAttenuationH->PreRender();
-        ImageAttenuationH->useShader(screenWidth, screenHeight);
+        Hyperbalic->UpdateVectors(vertex, indices);
+        Hyperbalic->PreRender();
+        Hyperbalic->useShader(screenWidth, screenHeight);
         buffer->renderTexture(GL_TEXTURE0);
-        ImageAttenuationH->setUniform1i("sampler", GL_TEXTURE0);
-        ImageAttenuationH->setUniform1f("blurAmount", blurAmount);
-        ImageAttenuationH->setUniform1f("alpha", alpha);
-        ImageAttenuationH->setUniform1i("radius", radius);
-
-        ImageAttenuationH->Render();
-        ImageAttenuationH->StopRender();
+        Hyperbalic->setUniform1i("sampler", GL_TEXTURE0);
+        Hyperbalic->setUniform1f("blurAmount", blurAmount);
+        Hyperbalic->setUniform1f("alpha", alpha);
+        Hyperbalic->setUniform1i("radius", radius);
+        Hyperbalic->Render();
+        Hyperbalic->StopRender();
 
       
         Bloom->UpdateVectors(vertex2, indices);
@@ -992,7 +1325,7 @@ x, y + height, 0.0f, 0.0f, 1.0f
         vertex2.shrink_to_fit();
         delete buffer;
     }
-    void drawShadowTexture(std::string str, float x, float y, float width, float height, float alpha, float blurRadius, float total, TextureAtlas atlas, Color shadow) {
+    void drawShadowTexture(std::string str, float x, float y, float width, float height, float alpha, float blurRadius, float total, Color shadow) {
         FrameBuffer* buffer = new FrameBuffer(screenWidth, screenHeight);
         buffer->StartRead();
         drawTexture(str, x, y, width, height);
@@ -1019,12 +1352,12 @@ x, y + height, 0.0f, 0.0f, 1.0f
         ImageShadow->setUniform1i("sampler", GL_TEXTURE0);
         ImageShadow->Render();
         ImageShadow->StopRender();
-
-        auto lastElementIterator = atlas.textures.rbegin();
-        TextureInfo& value = atlas.textures.find(str)->second;
+        RenderTextureHelper textureHelper = RenderTextureHelper::getInstance();
+        TextureAtlas& atlas = textureHelper.atlas;
         if (atlas.textures.find(str) == atlas.textures.end()) {
             atlas.addTexture(str);
         }
+        TextureInfo& value = atlas.textures.find(str)->second;
         Bloom->PreRender();
         Bloom->useShader(screenWidth, screenHeight);
         buffer->renderTexture(GL_TEXTURE1);

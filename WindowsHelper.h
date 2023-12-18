@@ -27,7 +27,7 @@ static Windows& getInstance() {
 	static Windows instance;
 	return instance;
 }
-GLFWwindow* createWindow(float x, float y, float screenWidth, float screenHeight, Color color, bool outline, const char* name, const char* logo, FT_Library ft) {
+GLFWwindow* createWindow(float x, float y, float screenWidth, float screenHeight, Color color, bool outline, const char* name, const char* logo) {
 	this->x = x;
 	this->y = y;
 	this->screenWidth = screenWidth;
@@ -37,13 +37,11 @@ GLFWwindow* createWindow(float x, float y, float screenWidth, float screenHeight
 	this->logo = logo;
 	this->name = name;
 	this->color = color;
-	this->ft = ft;
 	this->outlinecolor = Color("#FFFFFF");
 	BarStep = 25.0f;
 	RenderUtils::getInstance().screenWidth = screenWidth;
 	RenderUtils::getInstance().screenHeight = screenHeight;
 
-	EnableFontRender();
 	addButtonBar(7, 15, 2, "C:/Users/User/Desktop/APISystem/DKIT/Project1/img/rollup.png", Color("#2E2E2E"), Color("#B7B0B0"), RollUp);
 	addButtonBar(0, 15, 15, "C:/Users/User/Desktop/APISystem/DKIT/Project1/img/recover.png", Color("#2E2E2E"), Color("#B7B0B0"), Recover);
 	addButtonBar(0, 15, 15, "C:/Users/User/Desktop/APISystem/DKIT/Project1/img/close.png", Color("#2E2E2E"), Color("#9B3030"), Close);
@@ -74,30 +72,24 @@ void init() {
 }
 void Render2D() {
 	if (outline) {
-		RenderUtils::getInstance().Rect(0, 0, screenWidth, screenHeight, outlinecolor, outlinecolor, outlinecolor, outlinecolor, rounded, 1.0f);
-		RenderUtils::getInstance().Rect(1, 1, screenWidth - 2, screenHeight - 2, color, color, color, color, rounded, 1.0f);
+		RenderUtils::getInstance().Rect(0, 0, screenWidth, screenHeight, outlinecolor, rounded, 1.0f);
+		RenderUtils::getInstance().Rect(1, 1, screenWidth - 2, screenHeight - 2, color, rounded, 1.0f);
 	}
 	else {
-		RenderUtils::getInstance().Rect(0, 0, screenWidth, screenHeight, color, color, color, color, rounded, 1.0f);
+		RenderUtils::getInstance().Rect(0, 0, screenWidth, screenHeight, color, rounded, 1.0f);
 	}
 	setBarX(screenWidth - 90);
 	setBarY(20.0f);
+
 	renderBar();
-	scene->render(ft);
+
+	scene->render();
 }
 GLFWwindow* getWindows() {
 	return window;
 }
 Scene* getScene() {
 	return scene;
-}
-bool EnableFontRender() {
-	if (FT_Init_FreeType(&ft)) {
-		std::cout << "Error FT" << std::endl;
-		glfwTerminate();
-		return true;
-	}
-	return false;
 }
 void setScene(Scene* scene) {
 	this->scene = scene;
@@ -156,8 +148,6 @@ bool getFullScreen() {
 void setEnableRecover(bool recover) {
 	this->EnableRecover = recover;
 }
-FT_Library ft;
-
 private:
 bool FullScreen;
 float BarX, BarY, BarStep;

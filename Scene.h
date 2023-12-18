@@ -6,7 +6,7 @@ public:
 		this->name = name;
 		init();
 	};
-virtual void render(FT_Library ft);
+virtual void render();
 virtual void init();
 virtual void close();
 virtual void mouseClicked(int button, int action);

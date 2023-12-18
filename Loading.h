@@ -19,7 +19,7 @@ public:
 	Loading(std::string name) : Scene(name){
 		init();
 	};
-	void render(FT_Library ft) override;
+	void render() override;
 	void init() override;
 	void close() override;
 	void mouseClicked(int button, int action) override;

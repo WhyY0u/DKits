@@ -1,7 +1,6 @@
 ﻿#include "WindowsHelper.h"
 #include <Windows.h>
 #include "Register.h"
-FT_Library ft;
 Windows& windows = Windows::getInstance();
 void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
     glViewport(0, 0, width, height);
@@ -55,14 +54,10 @@ int main() {
     if (windows.EnableGLFW()) {
         return -1;
     }
-    if (windows.EnableFontRender()) {
-        glfwTerminate();
-        return -1;
-    }
     windows.clear();
-    windows.setWindows(windows.createWindow(20, 20, 857, 640, Color("#111111"), true, "Dissimilate", "null", ft));
+    windows.setWindows(windows.createWindow(20, 20, 857, 640, Color("#111111"), true, "Dissimilate", "null"));
     windows.outlinecolor = Color("#3D3D3D");
-    windows.setRounded(0.035f);
+    windows.setRounded(20.0f);
     windows.setScene(new Menu("Menu"));
     if (!windows.getWindows()) {
         glfwTerminate();
@@ -83,6 +78,8 @@ int main() {
     double lastTime = 0.0;
     int frameCount = 0;
     windows.init();
+    glEnable(GL_MULTISAMPLE);
+
     while (!glfwWindowShouldClose(windows.getWindows())) {\
         double time = glfwGetTime();
         double deltaTime = time - lastTime;

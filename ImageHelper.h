@@ -47,7 +47,23 @@ public:
      void operator=(const ImageHelper&) = delete;
 };
 class TextAtlas {
+public:
+    TextAtlas() : maxsize(2048), Ax(0), Ay(0), Aheight(0) {
+        glGenTextures(1, &textureID);
+        glBindTexture(GL_TEXTURE_2D, textureID);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, maxsize, maxsize, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+        glBindTexture(GL_TEXTURE_2D, 0);
+  }
+    int Ax, Ay, Aheight;
+    float maxsize;
 
+private:
+
+GLuint textureID;
 };
 class TextureAtlas {
 public:
